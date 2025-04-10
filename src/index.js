@@ -1,27 +1,21 @@
-const { ApolloServer } = require("@apollo/server");
-const express = require("express");
-const { expressMiddleware } = require("@apollo/server/express4");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const dotEnv = require("dotenv").config()
+const { ApolloServer } = require('@apollo/server');
+const { startStandaloneServer } = require('@apollo/server/standalone');
+const dotenv = require("dotenv").config();
 
-const typeDefs = require("./schema");
-const resolvers = require("./resolvers");
+const typeDefs = require('../src/schema.js');
+const resolvers = require('../src/resolvers/movieResolvers.js');
 
-async function startServer () {
-    const app = express();
-    const server = new ApolloServer({ typeDefs, resolvers });
-    // dotEnv.config();
-    await server.start();
+async function startServer() {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
 
-    app.use(cors());
-    app.use(bodyParser.json()); 
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: 8000 },
+  });
 
-    app.use("/graphql", expressMiddleware(server));
-
-    app.listen(8000, () => {
-        console.log(`🚀 Server running at http://localhost:8000/graphql`);
-    });
+  console.log(`Server ready at: ${url}`);
 }
 
 startServer();
