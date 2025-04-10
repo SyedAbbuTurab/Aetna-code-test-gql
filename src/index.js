@@ -2,8 +2,8 @@ const { ApolloServer } = require('@apollo/server');
 const { startStandaloneServer } = require('@apollo/server/standalone');
 const dotenv = require("dotenv").config();
 
-const typeDefs = require('../src/schema.js');
-const resolvers = require('../src/resolvers/movieResolvers.js');
+const typeDefs = require('./schema.js');
+const resolvers = require('./resolvers/movieResolvers.js');
 
 async function startServer() {
   const server = new ApolloServer({
