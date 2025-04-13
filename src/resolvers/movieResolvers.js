@@ -35,15 +35,11 @@ const resolvers = {
 
                     if (err) return reject(err);
                     if (!movie) return reject(null);
-                    console.log(movie);
-
 
                     sqlRating = `SELECT AVG(rating) AS average_rating FROM ratings WHERE movieId = ?`;
 
                     ratingsDb.get(sqlRating, [movie.movieId], (errRating, ratingRows) => {
                         if (errRating) return reject(errRating);
-
-                        console.log("ratingRows", ratingRows);
 
                         const formatted = {
                             imdbId: movie.imdbId,
