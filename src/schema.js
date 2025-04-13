@@ -23,6 +23,7 @@ const typeDefs = `#graphql
     type Query {
         movies(page: Int!): [Movie]
         movie(imdbId: ID!): MovieDetials
+        moviesByYear(page: Int!, year: Int!, sortDesc: Boolean): [Movie]
     }
 
 `
