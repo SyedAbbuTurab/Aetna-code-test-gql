@@ -58,6 +58,25 @@ const resolvers = {
 
                 })
             })
+        },
+        moviesByYear:(_, {year, page = 1, sortDesc = false}) => {
+
+            const MOVIES_PER_PAGE = 50;
+            const offset = (page - 1) * MOVIES_PER_PAGE;
+            const sortOrder = sortDesc ? 'DESC' : 'ASC';
+            
+            const sql = `SELECT movieId, imdbId, title, genres, releaseDate, budget
+            FROM movies
+            WHERE substr(releaseDate, 1, 4) =?
+            ORDER BY releaseDate ${sortOrder}
+            LIMIT ? OFFSET ?`;
+
+            return new Promise((resolve, reject) => {
+                moviesDb.all(sql, [year.toSting(), MOVIES_PER_PAGE, offset], ()=>{
+                    
+                })
+            })
+            
         }
     }
 }
