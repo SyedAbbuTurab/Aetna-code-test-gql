@@ -13,7 +13,7 @@ const typeDefs = `#graphql
         title: String!
         description: String
         runtime:Int!
-        averageRating: Float!
+        averageRating: Float
         genres: [String!]!
         releaseDate: String!
         originalLanguage: String!
