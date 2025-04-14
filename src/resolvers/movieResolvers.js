@@ -59,12 +59,12 @@ const resolvers = {
                 })
             })
         },
-        moviesByYear:(_, {year, page = 1, sortDesc = false}) => {
+        moviesByYear: (_, { year, page = 1, sortDesc = false }) => {
 
             const MOVIES_PER_PAGE = 50;
             const offset = (page - 1) * MOVIES_PER_PAGE;
             const sortOrder = sortDesc ? 'DESC' : 'ASC';
-            
+
             const sql = `SELECT movieId, imdbId, title, genres, releaseDate, budget
             FROM movies
             WHERE substr(releaseDate, 1, 4) =?
@@ -72,11 +72,22 @@ const resolvers = {
             LIMIT ? OFFSET ?`;
 
             return new Promise((resolve, reject) => {
-                moviesDb.all(sql, [year.toSting(), MOVIES_PER_PAGE, offset], ()=>{
-                    
+                moviesDb.all(sql, [year.toSting(), MOVIES_PER_PAGE, offset], (err, rows) => {
+
+                    if (err) return reject(err);
+
+                    const formatted = rows.map((row) => ({
+                        imdbId: row.imdbId,
+                        movieId: row.movieId,
+                        title: row.title,
+                        genres: JSON.parse(row.genres).map((g) => g.name),
+                        releaseDate: row.releaseDate,
+                        budget: `$${Number(row.budget).toLocaleString("en-US")}`
+                    }))
+                    resolve(formatted);
                 })
             })
-            
+
         }
     }
 }
