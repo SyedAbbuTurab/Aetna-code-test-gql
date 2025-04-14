@@ -72,7 +72,7 @@ const resolvers = {
             LIMIT ? OFFSET ?`;
 
             return new Promise((resolve, reject) => {
-                moviesDb.all(sql, [year.toSting(), MOVIES_PER_PAGE, offset], (err, rows) => {
+                moviesDb.all(sql, [year.toString(), MOVIES_PER_PAGE, offset], (err, rows) => {
 
                     if (err) return reject(err);
 
