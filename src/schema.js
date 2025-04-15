@@ -24,6 +24,7 @@ const typeDefs = `#graphql
         movies(page: Int!): [Movie]
         movie(imdbId: ID!): MovieDetials
         moviesByYear(page: Int!, year: Int!, sortDesc: Boolean): [Movie]
+        moviesByGenre(page: Int!, genre: String!): [Movie]
     }
 
 `
