@@ -88,6 +88,31 @@ const resolvers = {
                 })
             })
 
+        },
+
+        moviesByGenre: (_, { genre, page = 1 }) => {
+            const MOVIES_PER_PAGE = 50;
+            const offset = (page - 1) * MOVIES_PER_PAGE
+
+            const sql = `SELECT * FROM MOVIES
+            WHERE LOWER(genres) LIKE ?
+            LIMIT ? OFFSET ?`;
+            const genrePattern = `%\"name\": \"${genre.toLowerCase()}\"%`;
+
+            return new Promise((resolve, reject) => {
+                moviesDb.all(sql, [genrePattern, MOVIES_PER_PAGE, offset], (err, rows) => {
+                    if (err) return reject(err);
+
+                    const formatted = rows.map((row) => ({
+                        imbdId: row.imbdId,
+                        title: row.title,
+                        genres: JSON.parse(row.genres).map(g => g.name),
+                        releaseDate: row.releaseDate,
+                        budget: `$${Number(row.budget).toLocaleString("en-US")}`
+                    }))
+                    resolve(formatted)
+                })
+            })
         }
     }
 }
